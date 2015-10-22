@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<agenda>
+	<contacto>
+		<nombre>Lucas Aranda</nombre>
+		<mail>lucas.a.aranda@gmail.com</mail>
+	</contacto>
+        <contacto>
+		<nombre>Matias Martinez</nombre>
+		<mail>matimartinez91@gmail.com</mail>
+	</contacto>
+        
+        <contacto>
+		<nombre>Gerardo Stella</nombre>
+		<mail>gerardostella@gmail.com</mail>
+	</contacto>
+        
+</agenda>

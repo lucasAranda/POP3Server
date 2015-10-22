@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><mails>
+    <mail>
+        <from>alfonsovallone@gmail.com</from>
+        <timstamp>23/10/2014 23:30:00</timstamp>
+        <temperatura>5</temperatura>
+        <tension>6</tension>
+        <corriente>7</corriente>
+        <potencia>4</potencia>
+        <presion>5</presion>
+    </mail>
+    <mail>
+        <from>alfonsovallone@gmail.com</from>
+        <timstamp>23/10/2014 23:30:00</timstamp>
+        <temperatura>5</temperatura>
+        <tension>6</tension>
+        <corriente>7</corriente>
+        <potencia>4</potencia>
+        <presion>5</presion>
+    </mail>
+<mail><from>matimartinez91@gmail.com</from><timstamp>21/10/2015 18:03:00</timstamp><temperatura>24</temperatura><tension>12</tension><corriente>75</corriente><potencia>1500</potencia><presion>6</presion></mail></mails>
