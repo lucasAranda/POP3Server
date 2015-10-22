@@ -5,6 +5,8 @@
  */
 package main;
 
+import view.Pantalla;
+
 /**
  *
  * @author LUCAS
@@ -16,6 +18,7 @@ public class Main {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        new Pantalla().setVisible(true);
     }
     
 }

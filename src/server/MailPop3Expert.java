@@ -44,6 +44,14 @@ public class MailPop3Expert implements Runnable {
     private Store store;
     private String formatoFecha = "dd/MM/yyyy HH:mm:ss";
 
+    public MailPop3Expert(String server, String protocol, String username, String password, int frecuency) {
+        this.server = server;
+        this.username = username;
+        this.password = password;
+        this.frecuency = frecuency;
+        this.proto = protocol;
+    }
+
     public void printMessageInfo(BufferedReader reader, int id) throws IOException {
         String from = "";
         String subject = "";
@@ -87,10 +95,11 @@ public class MailPop3Expert implements Runnable {
             store.connect(server, username, password);
 
         } catch (Exception e) {
-            log.setText(log.getText() + new SimpleDateFormat(formatoFecha).format(new Date()) + "-Error tratando de conectar: " + e.getMessage() + "\n");
+            e.printStackTrace();
+            //log.setText(log.getText() + new SimpleDateFormat(formatoFecha).format(new Date()) + "-Error tratando de conectar: " + e.getMessage() + "\n");
             return false;
         }
-        log.setText(log.getText() + new SimpleDateFormat(formatoFecha).format(new Date()) + "-Conectado.. \n");
+        //log.setText(log.getText() + new SimpleDateFormat(formatoFecha).format(new Date()) + "-Conectado.. \n");
         return true;
 
     }
