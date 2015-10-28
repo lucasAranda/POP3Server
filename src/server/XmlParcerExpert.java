@@ -36,8 +36,8 @@ import org.xml.sax.SAXException;
 public class XmlParcerExpert {
 
     private static XmlParcerExpert instance;
-    private String agendaPath = "E:\\Facultad\\Sistemas de transmicion de datos\\tp2 mail\\mailpop3\\src\\mailpop3\\remitentes.xml";
-    private String mailPath = "E:\\Facultad\\Sistemas de transmicion de datos\\tp2 mail\\mailpop3\\src\\mailpop3\\mails.xml";
+    private String agendaPath = "C:\\Users\\LUCAS\\Documents\\NetBeansProjects\\POP3Server\\src\\main\\remitentes.xml";
+    private String mailPath = "C:\\Users\\LUCAS\\Documents\\NetBeansProjects\\POP3Server\\src\\main\\mails.xml";
     private String formatoFecha = "dd/MM/yyyy HH:mm:ss";
 
     public static XmlParcerExpert getInstance() {

@@ -142,10 +142,19 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="server">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="pop.gmail.com"/>
+          </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="pass">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="serverpop3"/>
+          </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="user">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="server.pop.tres@gmail.com"/>
+          </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="connect">
           <Properties>

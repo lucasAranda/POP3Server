@@ -5,6 +5,9 @@
  */
 package view;
 
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+import model.Mail;
 import server.MailPop3Expert;
 
 /**
@@ -12,7 +15,9 @@ import server.MailPop3Expert;
  * @author LUCAS
  */
 public class Pantalla extends javax.swing.JFrame {
+
     private MailPop3Expert pop3;
+    private Thread t;
 
     /**
      * Creates new form pantalla
@@ -59,6 +64,12 @@ public class Pantalla extends javax.swing.JFrame {
         frecuency.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
 
         jLabel5.setText("minutos");
+
+        server.setText("pop.gmail.com");
+
+        pass.setText("serverpop3");
+
+        user.setText("server.pop.tres@gmail.com");
 
         connect.setText("Conectar");
         connect.addActionListener(new java.awt.event.ActionListener() {
@@ -157,9 +168,13 @@ public class Pantalla extends javax.swing.JFrame {
 
     private void connectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectActionPerformed
         // TODO add your handling code here:
-         pop3 = new MailPop3Expert(server.getText(), "SSL", user.getText(), pass.getText(), Integer.valueOf(String.valueOf(frecuency.getValue())));
+        pop3 = new MailPop3Expert(server.getText(), "SSL", user.getText(), pass.getText(), Integer.valueOf(String.valueOf(frecuency.getValue())), this);
         if (pop3.connect()) {
-            System.out.println("JOYA!");
+            System.out.println("CONEXION ESTABLECIDA");
+            t = new Thread(pop3);
+
+            t.start();
+            loadMails();
         }
     }//GEN-LAST:event_connectActionPerformed
 
@@ -181,6 +196,32 @@ public class Pantalla extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void init() {
-       
+
+    }
+
+    public void loadMails() {
+        DefaultTableModel defaultTableModel = new DefaultTableModel();
+        defaultTableModel.addColumn("Remitente");
+        defaultTableModel.addColumn("Fecha y Hora");
+        defaultTableModel.addColumn("Temperatura [°C]");
+        defaultTableModel.addColumn("Tension [V]");
+        defaultTableModel.addColumn("Corriente [A]");
+        defaultTableModel.addColumn("Potencia [W]");
+        defaultTableModel.addColumn("Presión [Psi]");
+        List<Mail> mails = pop3.findMails();
+
+        for (Mail mail : mails) {
+            Object[] fila = new Object[7];
+            fila[0] = mail.getFrom();
+            fila[1] = mail.getTimestamp();
+            fila[2] = mail.getTemperatura();
+            fila[3] = mail.getTension();
+            fila[4] = mail.getCorriente();
+            fila[5] = mail.getPotencia();
+            fila[6] = mail.getPresion();
+            defaultTableModel.addRow(fila);
+        }
+
+        mailTable.setModel(defaultTableModel);
     }
 }

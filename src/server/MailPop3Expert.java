@@ -23,8 +23,11 @@ import javax.mail.Part;
 import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.internet.MimeBodyPart;
+import javax.swing.JFrame;
 import javax.swing.JTextArea;
+import model.Mail;
 import org.apache.commons.net.pop3.POP3Client;
+import view.Pantalla;
 
 /**
  *
@@ -40,32 +43,17 @@ public class MailPop3Expert implements Runnable {
     private boolean connect;
     private int frecuency;
     private POP3Client pop3;
-    private JTextArea log;
+    private Pantalla frame;
     private Store store;
     private String formatoFecha = "dd/MM/yyyy HH:mm:ss";
 
-    public MailPop3Expert(String server, String protocol, String username, String password, int frecuency) {
+    public MailPop3Expert(String server, String protocol, String username, String password, int frecuency, Pantalla frame) {
         this.server = server;
         this.username = username;
         this.password = password;
         this.frecuency = frecuency;
         this.proto = protocol;
-    }
-
-    public void printMessageInfo(BufferedReader reader, int id) throws IOException {
-        String from = "";
-        String subject = "";
-        String line;
-        while ((line = reader.readLine()) != null) {
-            String lower = line.toLowerCase(Locale.ENGLISH);
-            if (lower.startsWith("from: ")) {
-                from = line.substring(6).trim();
-            } else if (lower.startsWith("subject: ")) {
-                subject = line.substring(9).trim();
-            }
-        }
-
-        log.setText(log.getText() + new SimpleDateFormat(formatoFecha).format(new Date()) + Integer.toString(id) + "- From: " + from + "  Subject: " + subject + "\n");
+        this.frame = frame;
     }
 
     public boolean connect() {
@@ -96,10 +84,8 @@ public class MailPop3Expert implements Runnable {
 
         } catch (Exception e) {
             e.printStackTrace();
-            //log.setText(log.getText() + new SimpleDateFormat(formatoFecha).format(new Date()) + "-Error tratando de conectar: " + e.getMessage() + "\n");
             return false;
         }
-        //log.setText(log.getText() + new SimpleDateFormat(formatoFecha).format(new Date()) + "-Conectado.. \n");
         return true;
 
     }
@@ -114,7 +100,6 @@ public class MailPop3Expert implements Runnable {
 
     @Override
     public void run() {
-
         //obtengo la agenda
         List<String> agenda = XmlParcerExpert.getInstance().getAgenda();
 
@@ -127,11 +112,6 @@ public class MailPop3Expert implements Runnable {
 
                 // Obtiene los mails
                 Message[] arrayMessages = folderInbox.getMessages();
-
-                if (arrayMessages.length <= 0) {
-                    log.setText(log.getText() + new SimpleDateFormat(formatoFecha).format(new Date()) + "-No hay mensajes para mostrar \n");
-
-                }
 
                 //procesa los mails
                 for (int i = 0; i < arrayMessages.length; i++) {
@@ -157,8 +137,7 @@ public class MailPop3Expert implements Runnable {
                             }
                         }
 
-                    } else if (contentType.contains("text/plain")
-                            || contentType.contains("text/html")) {
+                    } else if (contentType.contains("text/plain") || contentType.contains("text/html")) {
                         Object content = message.getContent();
                         if (content != null) {
                             messageContent = content.toString();
@@ -176,18 +155,15 @@ public class MailPop3Expert implements Runnable {
                         try{
                             messageContent = messageContent.substring(messageContent.indexOf("&gt"), messageContent.indexOf("&lt;") + 4);
                             if (messageContent.startsWith("&gt") && messageContent.endsWith("&lt;")) {
-                                log.setText(log.getText() + new SimpleDateFormat(formatoFecha).format(new Date()) + "PROCESANDO MAIL - From: " + from + "  Subject: " + subject + "\n");
                                 //procesa el mail
                                 XmlParcerExpert.getInstance().processAndSaveMail(from, messageContent);
-                            } else {
-                                log.setText(log.getText() + new SimpleDateFormat(formatoFecha).format(new Date()) + "MAIL RECHAZADO: no cumple con la trama - From: " + from + "  Subject: " + subject + "\n");
+                                frame.loadMails();
                             }
                         }catch(Exception e){
-                                log.setText(log.getText() + new SimpleDateFormat(formatoFecha).format(new Date()) + "MAIL RECHAZADO: no cumple con la trama - From: " + from + "  Subject: " + subject + "\n");                        
+                            e.printStackTrace();
                         }
-                    }else{
-                        log.setText(log.getText() + new SimpleDateFormat(formatoFecha).format(new Date()) + "MAIL RECHAZADO: remitente rechazado - From: " + from + "  Subject: " + subject + "\n");
-
+                    }else {
+                        //no lo guarda
                     }
 
                 }
@@ -199,13 +175,13 @@ public class MailPop3Expert implements Runnable {
 
             } catch (IOException e) {
                 e.printStackTrace();
-                return;
             } catch (InterruptedException ex) {
                 Logger.getLogger(MailPop3Expert.class.getName()).log(Level.SEVERE, null, ex);
             } catch (MessagingException ex) {
                 Logger.getLogger(MailPop3Expert.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        
 
     }
 
@@ -265,12 +241,8 @@ public class MailPop3Expert implements Runnable {
         this.frecuency = frecuency;
     }
 
-    public JTextArea getLog() {
-        return log;
-    }
-
-    public void setLog(JTextArea log) {
-        this.log = log;
+    public List<Mail> findMails() {
+        return XmlParcerExpert.getInstance().getMails();
     }
 
 }
