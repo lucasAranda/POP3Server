@@ -12,8 +12,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -22,6 +20,8 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -39,6 +39,7 @@ public class XmlParcerExpert {
     private String agendaPath = "C:\\Users\\LUCAS\\Documents\\NetBeansProjects\\POP3Server\\src\\main\\remitentes.xml";
     private String mailPath = "C:\\Users\\LUCAS\\Documents\\NetBeansProjects\\POP3Server\\src\\main\\mails.xml";
     private String formatoFecha = "dd/MM/yyyy HH:mm:ss";
+    private static final Logger log = LogManager.getLogger(XmlParcerExpert.class.getName());
 
     public static XmlParcerExpert getInstance() {
         if (instance == null) {
@@ -114,7 +115,7 @@ public class XmlParcerExpert {
                 saveMailsInXML(from, timeStamp, temperatura, tension, corriente, potencia, presion);
             }
         } catch (Exception e) {
-
+            
         }
         return null;
     }
@@ -131,11 +132,11 @@ public class XmlParcerExpert {
             }
 
         } catch (ParserConfigurationException ex) {
-            Logger.getLogger(XmlParcerExpert.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(XmlParcerExpert.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SAXException ex) {
-            Logger.getLogger(XmlParcerExpert.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(XmlParcerExpert.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(XmlParcerExpert.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(XmlParcerExpert.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
     }
@@ -217,7 +218,7 @@ public class XmlParcerExpert {
             // Output to console for testing
             // StreamResult result = new StreamResult(System.out);
             transformer.transform(source, result);
-
+            log.info("Mail nuevo guardado");
             System.out.println("File saved!");
 
         } catch (ParserConfigurationException pce) {
@@ -225,9 +226,9 @@ public class XmlParcerExpert {
         } catch (TransformerException tfe) {
             tfe.printStackTrace();
         } catch (SAXException ex) {
-            Logger.getLogger(XmlParcerExpert.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(XmlParcerExpert.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(XmlParcerExpert.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(XmlParcerExpert.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

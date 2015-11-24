@@ -51,7 +51,7 @@ public class Pantalla extends javax.swing.JFrame {
         mailTable = new javax.swing.JTable();
         jLabel6 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("Servidor POP3:");
 
@@ -61,7 +61,7 @@ public class Pantalla extends javax.swing.JFrame {
 
         jLabel4.setText("Actualizar cada:");
 
-        frecuency.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
+        frecuency.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
 
         jLabel5.setText("minutos");
 
@@ -171,6 +171,7 @@ public class Pantalla extends javax.swing.JFrame {
         pop3 = new MailPop3Expert(server.getText(), "SSL", user.getText(), pass.getText(), Integer.valueOf(String.valueOf(frecuency.getValue())), this);
         if (pop3.connect()) {
             System.out.println("CONEXION ESTABLECIDA");
+            //this.dispose();
             t = new Thread(pop3);
 
             t.start();
@@ -223,5 +224,9 @@ public class Pantalla extends javax.swing.JFrame {
         }
 
         mailTable.setModel(defaultTableModel);
+    }
+    
+    public void conectar(){
+        connectActionPerformed(null);
     }
 }

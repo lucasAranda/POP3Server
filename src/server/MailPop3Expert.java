@@ -5,15 +5,12 @@
  */
 package server;
 
-import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
-import java.util.Locale;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.mail.Address;
 import javax.mail.Folder;
 import javax.mail.Message;
@@ -23,11 +20,13 @@ import javax.mail.Part;
 import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.internet.MimeBodyPart;
-import javax.swing.JFrame;
-import javax.swing.JTextArea;
 import model.Mail;
 import org.apache.commons.net.pop3.POP3Client;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import view.Pantalla;
+
 
 /**
  *
@@ -46,14 +45,23 @@ public class MailPop3Expert implements Runnable {
     private Pantalla frame;
     private Store store;
     private String formatoFecha = "dd/MM/yyyy HH:mm:ss";
-
+    private static final Logger log = LogManager.getLogger(MailPop3Expert.class.getName());
+    private URL config;
+    
     public MailPop3Expert(String server, String protocol, String username, String password, int frecuency, Pantalla frame) {
-        this.server = server;
-        this.username = username;
-        this.password = password;
-        this.frecuency = frecuency;
-        this.proto = protocol;
-        this.frame = frame;
+        try {
+            //this.config = new URL("file:src/server/Log4j.properties");
+            //this.config = new URL("C:\\Users\\LUCAS\\Documents\\NetBeansProjects\\POP3Server\\src\\server\\Log4j.properties");
+            //PropertyConfigurator.configure(config);
+            PropertyConfigurator.configure(this.getClass().getClassLoader().getResource("Log4j.properties"));
+            this.server = server;
+            this.username = username;
+            this.password = password;
+            this.frecuency = frecuency;
+            this.proto = protocol;
+            this.frame = frame;
+        } catch (Exception ex) {
+        }
     }
 
     public boolean connect() {
@@ -81,7 +89,7 @@ public class MailPop3Expert implements Runnable {
             }
             //Conectar...
             store.connect(server, username, password);
-
+            log.info("Conexion establecida");
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -94,7 +102,7 @@ public class MailPop3Expert implements Runnable {
         try {
             store.close();
         } catch (MessagingException ex) {
-            Logger.getLogger(MailPop3Expert.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(MailPop3Expert.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -176,9 +184,9 @@ public class MailPop3Expert implements Runnable {
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (InterruptedException ex) {
-                Logger.getLogger(MailPop3Expert.class.getName()).log(Level.SEVERE, null, ex);
+                //Logger.getLogger(MailPop3Expert.class.getName()).log(Level.SEVERE, null, ex);
             } catch (MessagingException ex) {
-                Logger.getLogger(MailPop3Expert.class.getName()).log(Level.SEVERE, null, ex);
+                //Logger.getLogger(MailPop3Expert.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         

@@ -18,7 +18,11 @@ public class Main {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        new Pantalla().setVisible(true);
+        Pantalla p = new Pantalla();
+        p.setVisible(true);
+        
+        p.conectar();
+        p.dispose();
     }
-    
+
 }
